@@ -1,0 +1,282 @@
+show databases;
+create database cricket;
+use cricket;
+
+create table regions(
+region_id varchar(20) primary key,
+region_name varchar(45));
+
+alter table regions
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table regions
+modify last_update_date date ;
+
+create table countries(
+country_cd varchar(45),
+country_name varchar(50),
+region_id varchar(45),
+foreign key(region_id)
+references regions(region_id));
+
+alter table countries
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table countries
+add primary key(country_cd);
+
+alter table countries
+modify last_update_date date ;
+
+create table departments(
+dept_id nvarchar(45) primary key,
+dept_name nvarchar(45) );
+
+alter table departments
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table departments
+modify last_update_date date ;
+
+show tables;
+
+create table job_types(
+job_type_cd varchar(20) primary key,
+job_type_name varchar(45));
+
+alter table job_types
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table job_types
+modify last_update_date date ;
+
+create table job_status_codes(
+job_status_cd varchar(45) primary key,
+status_desc varchar(45) );
+
+alter table job_status_codes
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table job_status_codes
+modify last_update_date date ;
+
+create table appl_status_codes(
+appl_status_cd varchar(45) primary key,
+status_desc varchar(50) );
+
+alter table appl_status_codes
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table appl_status_codes
+modify last_update_date date ;
+
+create table education_levels(
+edu_type_cd varchar(45) primary key,
+edu_level_name varchar(50));
+
+alter table education_levels
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table education_levels
+change column edu_type_cd  edu_level_cd varchar(45) ;
+
+alter table education_levels
+modify last_update_date date ;
+
+desc education_levels;
+create table education_type(
+edu_type_cd varchar(45) primary key,
+edu_type_name varchar(50));
+
+alter table education_type
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table education_type
+modify last_update_date date ;
+
+create table jobs(
+job_id varchar(45) primary key,
+job_title varchar(45),
+job_desc varchar(4000),
+job_type_cd varchar(45),
+dept_id nvarchar(45),
+job_status_cd varchar(45),
+foreign key(job_type_cd)
+references job_types(job_type_cd),
+foreign key(dept_id)
+references departments(dept_id),
+foreign key(job_status_cd)
+references job_status_codes(job_status_cd));
+
+alter table jobs
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+alter table applicants
+add primary key (appl_id);
+
+alter table jobs
+modify last_update_date date ;
+
+create table applicants(
+appl_id varchar(45),
+first_name varchar(45),
+last_name varchar(45),
+email varchar(45),
+phone_num int(10),
+address varchar(45),
+city varchar(45),
+state varchar(45),
+zip varchar(20),
+country_cd varchar(45),
+appl_status_cd varchar(45),
+edu_level_cd varchar(45),
+edu_type_cd varchar(45),
+resume_file_name varchar(50),
+cover_letter_text varchar(7897),
+date_applied varchar(45),
+employed_flag varchar(45),
+current_employer_name varchar(45),
+year_of_exp varchar(45),
+foreign key(country_cd)
+references countries(country_cd),
+foreign key(appl_status_cd)
+references appl_status_codes(appl_status_cd),
+foreign key(edu_level_cd)
+references education_levels(edu_level_cd),
+foreign key(edu_type_cd)
+references education_type(edu_type_cd));
+
+alter table applicants
+modify date_applied date ;
+
+alter table applicants
+modify phone_num long ;
+
+alter table applicants
+add column last_update_date varchar(45),
+add column last_update_by varchar(45);
+
+desc applicants;
+create table applicant_jobs(
+appl_id varchar(45) ,
+job_id varchar(45) ,
+appl_status_cd varchar(45) ,
+date_applied varchar(45),
+written_test_date varchar(45),
+inverview1_date varchar(45),
+inverview2_date varchar(45),
+last_update_date varchar(45),
+last_update_by varchar(45),
+foreign key(appl_id)
+references applicants(appl_id),
+foreign key(job_id)
+references jobs(job_id),
+foreign key(appl_status_cd)
+references appl_status_codes(appl_status_cd));
+
+alter table applicant_jobs
+change column inverview1_date interview1_date date,
+change column inverview2_date interview2_date date;
+
+alter table applicant_jobs
+modify date_applied date,
+modify last_update_date date;
+
+show tables;
+
+insert into regions(region_id,region_name)
+values 
+('EU','Europe'),
+('NA','North');
+
+insert into countries(country_cd,country_name,region_id)
+values
+('+389','North Macedonia','NA'),
+('+1','Europe','EU');
+
+update countries
+set last_update_date='2022-02-03', last_update_by='Shashi
+'
+where country_cd in('+1','+389');
+
+insert into departments (dept_id,dept_name)
+values
+('1','Developing');
+
+update departments
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where dept_id='1';
+
+insert into job_types (job_type_cd,job_type_name)
+values
+('1','IT Manager');
+
+update job_types
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where job_type_cd='1';
+
+insert into job_status_codes (job_status_cd,status_desc)
+values
+('1','Open');
+
+update job_status_codes
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where job_status_cd='1';
+
+insert into appl_status_codes (appl_status_cd,status_desc)
+values
+('1','Pending');
+
+update appl_status_codes
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where appl_status_cd='1';
+
+insert into education_levels (edu_level_cd,edu_level_name)
+values
+('1','Highschool');
+
+update education_levels
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where edu_level_cd='1';
+
+insert into education_type (edu_type_cd , edu_type_name)
+values
+('B.Tech','Electronics & Communication eng');
+
+update education_type
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where edu_type_cd='B.Tech';
+
+insert into jobs(job_id ,job_title ,job_desc ,job_type_cd ,dept_id ,job_status_cd )
+values
+('1','Development','Trinee Software eng','1','1','1');
+
+set sql_safe_update =0;
+update jobs
+set last_update_date='2022-02-03', last_update_by='Shashi'
+where job_id='1';
+
+insert into  applicants(
+appl_id,first_name ,last_name,email ,phone_num ,address ,city ,state ,zip ,country_cd ,appl_status_cd ,edu_level_cd ,
+edu_type_cd ,resume_file_name,cover_letter_text,date_applied ,employed_flag ,current_employer_name,year_of_exp,
+last_update_date,last_update_by )
+values
+('1','Shashi','reddy','shashidhar2799@gmail.com',845796566,'Anantapur','atp','Ap','515004','+1','1','1',
+'B.Tech','r1','applied','2022-01-28',null,'Shashi','0.2 months',
+'2022-02-03','Shashidhar');
+
+insert into applicant_jobs (
+appl_id,job_id,appl_status_cd,date_applied,written_test_date,interview1_date,interview2_date,
+last_update_date,last_update_by)
+values
+('1','1','1','2022-01-28','2022-01-29','2022-02-01','2022-02-03',
+'2022-02-03','Shashidhar');
